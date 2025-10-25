@@ -2,9 +2,21 @@ const Device = require('../models/Device');
 
 exports.createDevice = async (req, res) => {
   try {
+    const { type, client } = req.body;
+    
+    // Validation
+    if (!type || !type.trim()) {
+      return res.status(400).json({ message: 'Le type d\'appareil est requis' });
+    }
+    if (!client) {
+      return res.status(400).json({ message: 'Le client est requis' });
+    }
+    
     const device = new Device(req.body);
     await device.save();
-    res.status(201).json(device);
+    // Populate client after save
+    const populated = await Device.findById(device._id).populate('client');
+    res.status(201).json(populated);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

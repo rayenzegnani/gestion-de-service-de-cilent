@@ -4,9 +4,10 @@ const controller = require('../controllers/deviceController');
 const auth = require('../middleware/auth');
 const role = require('../middleware/role');
 
-router.post('/', auth, role(['admin','employee']), controller.createDevice);
-router.get('/', controller.getDevices);
-router.get('/:id', controller.getDevice);
+// Allow any authenticated user to create and view devices
+router.post('/', auth, controller.createDevice);
+router.get('/', auth, controller.getDevices);
+router.get('/:id', auth, controller.getDevice);
 router.put('/:id', auth, role(['admin','employee']), controller.updateDevice);
 router.delete('/:id', auth, role(['admin']), controller.deleteDevice);
 

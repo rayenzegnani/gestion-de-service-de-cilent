@@ -2,6 +2,19 @@ const Ticket = require('../models/Ticket');
 
 exports.createTicket = async (req, res) => {
   try {
+    const { client, device, description } = req.body;
+    
+    // Validation
+    if (!client) {
+      return res.status(400).json({ message: 'Le client est requis' });
+    }
+    if (!device) {
+      return res.status(400).json({ message: 'L\'appareil est requis' });
+    }
+    if (!description || !description.trim()) {
+      return res.status(400).json({ message: 'La description est requise' });
+    }
+    
     const ticket = new Ticket(req.body);
     await ticket.save();
     // Mongoose populate after save
