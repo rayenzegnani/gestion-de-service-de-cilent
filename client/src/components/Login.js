@@ -19,16 +19,62 @@ export default function Login({ onLogin }){
   if(mode === 'register') return <Register onRegistered={(user)=>{ onLogin(user); setMode('login'); }} onCancel={()=>setMode('login')} />;
 
   return (
-    <div className="max-w-sm mx-auto p-4 bg-white rounded shadow">
-      <h2 className="text-lg font-bold mb-2">Connexion</h2>
-      {err && <div className="text-red-600">{err}</div>}
-      <form onSubmit={submit} className="flex flex-col gap-2">
-        <input className="border p-2" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} />
-        <input type="password" className="border p-2" placeholder="Mot de passe" value={password} onChange={e=>setPassword(e.target.value)} />
-        <button className="bg-blue-600 text-white p-2 rounded">Se connecter</button>
-      </form>
-      <div className="mt-3 text-sm">
-        <button className="text-indigo-600" onClick={()=>setMode('register')}>Créer un compte</button>
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-800 mb-2">Atelier</h1>
+          <p className="text-gray-600">Gestion de Service Client</p>
+        </div>
+        
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">Connexion</h2>
+        
+        {err && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+            {err}
+          </div>
+        )}
+        
+        <form onSubmit={submit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+            <input 
+              type="email"
+              className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" 
+              placeholder="votre@email.com" 
+              value={email} 
+              onChange={e=>setEmail(e.target.value)}
+              required
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Mot de passe</label>
+            <input 
+              type="password" 
+              className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" 
+              placeholder="••••••••" 
+              value={password} 
+              onChange={e=>setPassword(e.target.value)}
+              required
+            />
+          </div>
+          
+          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold p-3 rounded-lg transition duration-200 shadow-lg hover:shadow-xl">
+            Se connecter
+          </button>
+        </form>
+        
+        <div className="mt-6 text-center">
+          <p className="text-gray-600 text-sm">
+            Pas encore de compte ?{' '}
+            <button 
+              className="text-blue-600 hover:text-blue-700 font-semibold hover:underline" 
+              onClick={()=>setMode('register')}
+            >
+              Créer un compte
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -25,26 +25,53 @@ export default function App(){
   const onLogin = (u)=> setUser(u);
   const logout = ()=>{ removeToken(); setUser(null); };
 
+  // Show login page without layout when not authenticated
+  if (!user) {
+    return <Login onLogin={onLogin} />;
+  }
+
   return (
     <Layout user={user} onLogout={logout}>
-      {!user ? (
-        <Login onLogin={onLogin} />
-      ) : (
-        <div className="grid grid-cols-4 gap-4">
-          <div className="col-span-1 bg-white p-4 rounded shadow">
-            <Clients />
-            <Devices />
+      <div className="space-y-6">
+        {/* Dashboard Header */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            {user.role === 'admin' && 'Tableau de bord Administrateur'}
+            {user.role === 'employee' && 'Tableau de bord Employé'}
+            {user.role === 'client' && 'Mon Espace Client'}
+          </h1>
+          <p className="text-gray-600">
+            Bienvenue, {user.name}
+          </p>
+        </div>
+
+        {/* Role-specific Dashboard */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          {user.role === 'client' && <ClientPage />}
+          {user.role === 'employee' && <EmployeePage />}
+          {user.role === 'admin' && <AdminPage />}
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left sidebar - Clients & Devices */}
+          <div className="lg:col-span-1 space-y-6">
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <Clients />
+            </div>
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <Devices />
+            </div>
           </div>
-          <div className="col-span-3 bg-white p-4 rounded shadow">
-            <h2 className="text-lg font-bold mb-2">Tableau de bord</h2>
-            {/* Render only the dashboard matching the user's role to avoid multiple dashboards showing */}
-            {user.role === 'client' && <ClientPage />}
-            {user.role === 'employee' && <EmployeePage />}
-            {user.role === 'admin' && <AdminPage />}
-            <Tickets />
+
+          {/* Right content - Tickets */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <Tickets />
+            </div>
           </div>
         </div>
-      )}
+      </div>
     </Layout>
   );
 }
